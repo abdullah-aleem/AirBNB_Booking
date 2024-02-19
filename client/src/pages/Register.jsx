@@ -5,10 +5,15 @@ function Register() {
     const [name,setName]=useState('');
     const [email,setEmail]=useState('');
     const [password,setPassword]=useState('');
-    function regUser(event){
+    async function regUser(event){
         event.preventDefault();
-        
-        axios.post('/register',{name,email,password});
+        try{
+          await axios.post('/register',{name,email,password});
+          alert('Registration is Succesfull')
+        }catch(e){
+          alert('Registration Failed.Try again later')
+        }
+       
     }
   return (
     <div className='mt-4 grow flex items-center justify-around'>
