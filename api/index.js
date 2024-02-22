@@ -3,6 +3,7 @@ const app=express()
 const cors=require('cors')
 const User=require('./models/User.js')
 const jwt=require('jsonwebtoken')
+const cookieParser=require('cookie-parser')
 //hash your password 
 const bcrypt = require('bcryptjs')
 require('dotenv').config()
@@ -13,9 +14,10 @@ const jwtSecret="fsdafasdfasklfalkdafckjfsdiafsadfsaerqwes"
 
 app.use(express.json())
 app.use(cors({
-    credentials:true,
+    credentials:true, 
     origin:'http://localhost:5173'
 }))
+app.use(cookieParser())
 //mongoose connection 
 mongoose.connect(process.env.MONGO_URL)
 
@@ -37,6 +39,19 @@ app.post('/register',async (req,res)=>{
     }
     
 }) 
+app.get('/profile',(req,res)=>{
+    const {token}=req.cookies;
+    if(token){
+        jwt.verify(token,jwtSecret,{},async (err,result)=>{
+            if(err) throw err;
+            const {name,email,id}=await User.findById(result.id);
+            res.json({name,email,id});
+        })
+    }else{ 
+        res.json(null)
+    }
+    
+})
 app.post( '/login',async (req,res)=>{
     console.log('in login')
     const {email,password}=req.body;
@@ -46,16 +61,16 @@ app.post( '/login',async (req,res)=>{
         if (passOk){
             jwt.sign({email:userDoc.email,id:userDoc._id},jwtSecret,{},(err,token)=>{
                 if (err) throw err;
-                res.cookie('token',token).json('found')
+                res.cookie('token',token).json(userDoc)
             })
             
             
         }else{
             res.status(422).json('password not okay')
         }
-    }else{
+    }else{ 
         res.status(422).json('not found');
     }
 }) 
- 
-app.listen(4000);  
+  
+app.listen(4000);    

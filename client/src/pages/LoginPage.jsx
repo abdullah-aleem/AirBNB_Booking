@@ -1,16 +1,19 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Header from '../Header'
 import { Link, Navigate } from 'react-router-dom'
 import axios from 'axios';
+import { UserContext } from '../UserContext';
 function LoginPage() {
   const [email,setEmail]=useState('');
   const [password,setPassword]=useState('');
   const [redirect,setRedirect]=useState(false);
+  const {setUser,ready,user}=useContext(UserContext)
   async function handleLogin(e){
     console.log('inside')
       e.preventDefault();
       try{
-        await axios.post('/login',{email,password})
+        const {data}=await axios.post('/login',{email,password})
+        setUser(data)
         setRedirect(true)
         alert('Login Successfull')
       }catch(e){
@@ -18,7 +21,8 @@ function LoginPage() {
       }
      
   }
-  if (redirect){
+  
+  if (redirect || (ready && user)){
     return <Navigate to={'/'}/>
   }
   return (
