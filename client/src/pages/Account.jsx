@@ -1,9 +1,10 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { UserContext } from '../UserContext'
 import { Link, Navigate, useParams } from 'react-router-dom'
-
+import axios from 'axios'
 function Account() {
- const {user,ready}=useContext(UserContext)
+  const [toHome,setToHome]=useState(false)
+ const {user,ready,setUser}=useContext(UserContext)
  let {subpage}=useParams()
  if (subpage=== undefined){
    subpage='profile'
@@ -12,8 +13,13 @@ function Account() {
     return 'Loading....'
   }
 
-
-  if(ready && !user){
+  async function logout(){
+    await axios.post('/logout')
+      setToHome(true)
+      setUser(null)
+      
+  }
+  if(ready && !user && !toHome){
     return <Navigate to={'/login'}/>
   }
 
@@ -25,9 +31,14 @@ function Account() {
       return 'py-2 px-8'
     }
   }
+  if(toHome){
+    return(
+      <Navigate to={'/'}/>
+    )
+  }
  return (
     <div>
-      <nav className='w-full flex mt-8 gap-2 justify-center'>
+      <nav className='w-full flex mt-8 gap-2 justify-center mb-8'>
       <Link className={linkClass('profile')} to={'/account'}>
         My Profile
       </Link>
@@ -38,7 +49,17 @@ function Account() {
         My Accommodations
       </Link>
       </nav>
-      
+      { subpage==='profile' && (
+        <div className='text-center max-w-lg mx-auto'>
+          Logged in as : {user.name} ({user.email})
+          <br />
+          <button className='primary text-white px-2 rounded-full max-w-md mt-2' onClick={()=>{
+            logout()
+          }}>
+          Logout
+          </button>
+        </div>
+      )}
     </div>
   )
 }

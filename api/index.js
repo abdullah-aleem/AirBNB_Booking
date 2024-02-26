@@ -14,13 +14,21 @@ const jwtSecret="fsdafasdfasklfalkdafckjfsdiafsadfsaerqwes"
 
 app.use(express.json())
 app.use(cors({
-    credentials:true, 
+    credentials:true,  
     origin:'http://localhost:5173'
 }))
 app.use(cookieParser())
 //mongoose connection 
-mongoose.connect(process.env.MONGO_URL)
+const connectToDatabase = ()=>{
+    mongoose.connect(process.env.MONGO_URL).then(()=>{
+        console.log('connected to server')
+    }).catch((err)=>{
+        console.error("cannot connect to mongo dp")
+        setTimeout(connectToDatabase,5000) 
+    })
+}
 
+connectToDatabase();
 
 app.get('/test',(req,res)=>{
     res.json('text ok');
@@ -29,7 +37,7 @@ app.post('/register',async (req,res)=>{
     const {name,email,password}=req.body;
     try{
         const userDoc=await User.create({
-            name,
+            name, 
             email,
             password:bcrypt.hashSync(password,bycryptSalt),
         })
@@ -44,33 +52,50 @@ app.get('/profile',(req,res)=>{
     if(token){
         jwt.verify(token,jwtSecret,{},async (err,result)=>{
             if(err) throw err;
-            const {name,email,id}=await User.findById(result.id);
-            res.json({name,email,id});
+           User.findById(result.id).then(({name,email,id})=>{
+                res.json({name,email,id});
+            }).catch(err=>{
+                res.status(422).json('Cannot get profile')
+            });
+            
         })
     }else{ 
         res.json(null)
     }
     
 })
+app.post('/logout',(req,res)=>{
+    res.cookie('token','').json('logout successfull')
+})
 app.post( '/login',async (req,res)=>{
     console.log('in login')
     const {email,password}=req.body;
-    const userDoc=await User.findOne({email})
-    if(userDoc){
-        const passOk=bcrypt.compareSync(password,userDoc.password)
-        if (passOk){
-            jwt.sign({email:userDoc.email,id:userDoc._id},jwtSecret,{},(err,token)=>{
-                if (err) throw err;
-                res.cookie('token',token).json(userDoc)
-            })
-            
-            
-        }else{
-            res.status(422).json('password not okay')
+    
+    try{
+        const userDoc=await User.findOne({email}).catch((err)=>{
+            res.status(422).json("dataBase down connect Later")
+        })
+        if(userDoc){
+            const passOk=bcrypt.compareSync(password,userDoc.password)
+            if (passOk){
+                jwt.sign({email:userDoc.email,id:userDoc._id},jwtSecret,{},(err,token)=>{
+                    if (err) throw err;
+                    res.cookie('token',token).json(userDoc)
+                })
+                
+                
+            }else{
+                res.status(422).json('password not okay')
+            }
+        }else{ 
+            res.status(422).json('not found');
         }
-    }else{ 
-        res.status(422).json('not found');
     }
+    catch(err){
+        res.status(422).json("dataBase down connect Later")
+    }
+   
+    
 }) 
   
 app.listen(4000);    
