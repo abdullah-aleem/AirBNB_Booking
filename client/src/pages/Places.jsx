@@ -22,6 +22,9 @@ function Places() {
             </>
         )
     }
+    function addPhotoByLink(){
+        
+    }
     return (
         <div>
             {action !== 'new' && <div className='text-center'>
