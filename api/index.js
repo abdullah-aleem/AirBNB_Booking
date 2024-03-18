@@ -70,6 +70,7 @@ app.post('/logout',(req,res)=>{
 
 app.post('/uploadByToken',(req,res)=>{
     const {link}=req.body()
+    
 })
 app.post( '/login',async (req,res)=>{
     console.log('in login')
