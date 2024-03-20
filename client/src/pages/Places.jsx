@@ -23,7 +23,7 @@ function Places() {
         )
     }
     function addPhotoByLink(){
-        
+        j
     }
     return (
         <div>

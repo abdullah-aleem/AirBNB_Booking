@@ -4,6 +4,8 @@ const cors=require('cors')
 const User=require('./models/User.js')
 const jwt=require('jsonwebtoken')
 const cookieParser=require('cookie-parser')
+const downloadImage=require('image-downloader')
+
 //hash your password 
 const bcrypt = require('bcryptjs')
 require('dotenv').config()
@@ -70,7 +72,18 @@ app.post('/logout',(req,res)=>{
 
 app.post('/uploadByToken',(req,res)=>{
     const {link}=req.body()
-    
+    const newName=Date.now()+'.jpg'
+    const options={
+        url:link,
+        dest:__dirname+'/uploads'+newName
+    }
+    downloadImage.image(options).then(({filename})=>{
+        res.json(filename)
+        console.log(filename)
+    }).catch(err=>{
+        res.status(422).json('cannot download image')
+    })
+
 })
 app.post( '/login',async (req,res)=>{
     console.log('in login')
