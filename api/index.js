@@ -15,6 +15,7 @@ const jwtSecret="fsdafasdfasklfalkdafckjfsdiafsadfsaerqwes"
 
 
 app.use(express.json())
+app.use('/uploads',express.static(__dirname+'/uploads'))
 app.use(cors({
     credentials:true,  
     origin:'http://localhost:5173'
@@ -36,6 +37,7 @@ app.get('/test',(req,res)=>{
     res.json('text ok');
 })
 app.post('/register',async (req,res)=>{
+    console.log("in register")
     const {name,email,password}=req.body;
     try{
         const userDoc=await User.create({
@@ -45,6 +47,7 @@ app.post('/register',async (req,res)=>{
         })
         res.json(userDoc)
     }catch(e){
+        console.error(e)
         res.status(422).json(e);
     }
     
@@ -71,14 +74,15 @@ app.post('/logout',(req,res)=>{
 })
 
 app.post('/uploadByToken',(req,res)=>{
-    const {link}=req.body()
-    const newName=Date.now()+'.jpg'
+    console.log("")
+    const {link}=req.body
+    const newName="photo"+Date.now()+'.jpg'
     const options={
         url:link,
-        dest:__dirname+'/uploads'+newName
+        dest:__dirname+'/uploads/'+newName
     }
     downloadImage.image(options).then(({filename})=>{
-        res.json(filename)
+        res.json(newName)
         console.log(filename)
     }).catch(err=>{
         res.status(422).json('cannot download image')
