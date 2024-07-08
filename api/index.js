@@ -5,6 +5,7 @@ const User=require('./models/User.js')
 const jwt=require('jsonwebtoken')
 const cookieParser=require('cookie-parser')
 const downloadImage=require('image-downloader')
+const multer=require('multer')
 
 //hash your password 
 const bcrypt = require('bcryptjs')
@@ -118,6 +119,16 @@ app.post( '/login',async (req,res)=>{
     }
    
     
-}) 
+})
+
+//creating a middhleware for data to be converted to file
+photosmidleware=multer({dest:'uploads/'})
+
+app.post('/upload',photosmidleware.array('photos',100),(req,res)=>{
+    console.log('in upload')
+    console.log(files)
+    res.json(req.files)
+
+})
   
 app.listen(4000);    
