@@ -9,7 +9,7 @@ function Places() {
     const [addedPhoto,setAddedPhoto]=useState([]);
     const [photoLink,setPhotoLink]=useState('');
     const [description,setDescription]=useState('');
-    const [perks,setPerks]=useState('');
+    const [perks,setPerks]=useState([]);
     const [extraInfo,setExtraInfo]=useState('');
     const [checkIn,setCheckIn]=useState('');
     const [checkOut,setCheckOut]=useState('');
@@ -97,7 +97,7 @@ function Places() {
                             <textarea className='' value={description} onChange={e=> setDescription(e.target.value)} />
                             {preinput('Perks','Select all the perks for your place')}
                             <div className='grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4'>
-                                <Perks slected={perks} onChange={setPerks}/>
+                                <Perks selected={perks} onChange={setPerks}/>
                             </div>
                             {preinput('Extra Info','house rules, etc')}
                             <textarea value={extraInfo} onChange={e=> setExtraInfo(e.target.value)}/>
