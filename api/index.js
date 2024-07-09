@@ -6,7 +6,7 @@ const jwt=require('jsonwebtoken')
 const cookieParser=require('cookie-parser')
 const downloadImage=require('image-downloader')
 const multer=require('multer')
-
+const fs=   require('fs')
 //hash your password 
 const bcrypt = require('bcryptjs')
 require('dotenv').config()
@@ -125,9 +125,17 @@ app.post( '/login',async (req,res)=>{
 photosmidleware=multer({dest:'uploads/'})
 
 app.post('/upload',photosmidleware.array('photos',100),(req,res)=>{
-    console.log('in upload')
-    console.log(files)
-    res.json(req.files)
+
+        const files=[];
+        for (let i=0;i<req.files.length;i++){
+            const {path,originalname }=req.files[i];
+            parts=originalname.split('.');
+            const newPath= path+'.'+ parts[parts.length-1];
+            fs.renameSync(path,newPath)
+            files.push(newPath.replace('uploads/',''));
+
+        }
+        res.json(files);
 
 })
   
