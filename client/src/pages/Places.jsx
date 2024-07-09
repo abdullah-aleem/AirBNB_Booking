@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, Navigate, useParams } from 'react-router-dom'
 import Perks from '../Perks';
 import axios from 'axios';
 function Places() {
@@ -14,6 +14,17 @@ function Places() {
     const [checkIn,setCheckIn]=useState('');
     const [checkOut,setCheckOut]=useState('');
     const [maxGuests,setMaxGuests]=useState('');
+    const [redirect,setRedirect]=useState('')
+    async function addNewPlace(ev){
+        ev.preventDefault
+        const placeData={title,address,addedPhoto,description,perks,extraInfo,checkIn,checkOut,maxGuests}
+        axios.post('/places',placeData).then(data=>{
+
+
+            setRedirect("/acounts/places")
+        })
+
+    }
     function preinput(header,text){
         return(
             <>
@@ -53,6 +64,12 @@ function Places() {
 
         })
     }
+
+    if (redirect){
+        return (
+            <Navigate to={redirect} />
+        )
+    }
     return (
         <div>
             {action !== 'new' && <div className='text-center'>
@@ -68,7 +85,7 @@ function Places() {
             {
                 action === 'new' && (
                     <div>
-                        <form>
+                        <form onSubmit={addNewPlace}>
                             {preinput('Title','Title for your place should be short and catchy')}        
                             <input type='text' value={title} onChange={e=> setTitle(e.target.value)} placeholder='title,for example "lonely Place"' />
                             {preinput('Address','Address to your place.')}
