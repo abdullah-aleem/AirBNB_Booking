@@ -1,6 +1,6 @@
 const mongoose=require('mongoose')
 
-const place = new mongoose.Schema({
+const Place = new mongoose.Schema({
     owner:{type:mongoose.Schema.Types.ObjectId,ref:'User'},
     title: String,
     address: String,
@@ -13,6 +13,6 @@ const place = new mongoose.Schema({
     maxGuests:Number,
 });
 
-const PlaceModel= mongoose.model('Place',place)
+const PlaceModel= mongoose.model('Place',Place)
 
 module.exports=PlaceModel

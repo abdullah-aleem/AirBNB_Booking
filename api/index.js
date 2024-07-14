@@ -7,6 +7,7 @@ const cookieParser=require('cookie-parser')
 const downloadImage=require('image-downloader')
 const multer=require('multer')
 const fs=   require('fs')
+const Place=require('./models/Place.js')
 //hash your password 
 const bcrypt = require('bcryptjs')
 require('dotenv').config()
@@ -139,4 +140,18 @@ app.post('/upload',photosmidleware.array('photos',100),(req,res)=>{
 
 })
   
+app.post('/places',(req,res)=>{
+    const {title,description,addedPhoto,extraInfo,perks,address,checkIn,checkOut,maxGuests}=req.body;
+
+    const {token}=req.cookies;
+    jwt.verify(token,jwtSecret,{},async (err,user)=>{
+        if(err) throw err;
+        const placeDoc=await Place.create({
+            owner:user.id,
+            title,address,addedPhoto,description,perks,extraInfo,checkIn,checkOut,maxGuests
+        })  
+        res.json(placeDoc)      
+    })
+    
+})
 app.listen(4000);    

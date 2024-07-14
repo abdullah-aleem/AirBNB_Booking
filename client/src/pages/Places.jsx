@@ -19,7 +19,7 @@ function Places() {
         ev.preventDefault
         const placeData={title,address,addedPhoto,description,perks,extraInfo,checkIn,checkOut,maxGuests}
         axios.post('/places',placeData).then(data=>{
-
+            
 
             setRedirect("/acounts/places")
         })
