@@ -16,12 +16,13 @@ function Places() {
     const [maxGuests,setMaxGuests]=useState('');
     const [redirect,setRedirect]=useState('')
     async function addNewPlace(ev){
-        ev.preventDefault
+        ev.preventDefault()
         const placeData={title,address,addedPhoto,description,perks,extraInfo,checkIn,checkOut,maxGuests}
         axios.post('/places',placeData).then(data=>{
             
+            console.log(data)
+            setRedirect("/account/places")
 
-            setRedirect("/acounts/places")
         })
 
     }
@@ -37,9 +38,12 @@ function Places() {
 
     if (redirect){
         return (
+            
             <Navigate to={redirect} />
+           
         )
     }
+    console.log(action)
     return (
         <div>
             {action !== 'new' && <div className='text-center'>
@@ -61,7 +65,7 @@ function Places() {
                             {preinput('Address','Address to your place.')}
                             <input type='text' value={address} onChange={e=> setAdress(e.target.value)} placeholder='address' />
                             {preinput('Photos','more===better')}               
-                            <div className='flex gap-2'>
+                            <div className='flex gap-2 w-full'>
                             <UploadPhoto addedPhoto={addedPhoto} setAddedPhoto={setAddedPhoto}/>
                             </div>
                             {preinput('Description','Description of your place')}

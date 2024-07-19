@@ -142,7 +142,7 @@ app.post('/upload',photosmidleware.array('photos',100),(req,res)=>{
   
 app.post('/places',(req,res)=>{
     const {title,description,addedPhoto,extraInfo,perks,address,checkIn,checkOut,maxGuests}=req.body;
-
+    console.log(req.body)
     const {token}=req.cookies;
     jwt.verify(token,jwtSecret,{},async (err,user)=>{
         if(err) throw err;
