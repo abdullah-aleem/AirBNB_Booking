@@ -3,7 +3,8 @@ import { Link, Navigate, useParams } from 'react-router-dom'
 import Perks from '../Perks';
 import axios from 'axios';
 import UploadPhoto from '../UploadPhoto';
-
+import Account from './Account';
+import AcountNav from '../AcountNav';
 function FormPage() {
     const [title,setTitle]=useState('');
     const [address,setAdress]=useState('');
@@ -33,6 +34,7 @@ function FormPage() {
     function preinput(header,text){
         return(
             <>
+
             <h2 className='text-xl mt-4 '>{header}</h2>
             <p className='text-gray-500 text-sm'>{text}</p>
             </>
@@ -41,6 +43,7 @@ function FormPage() {
     
   return (
     <div>
+        <AcountNav  />
                         <form onSubmit={addNewPlace}>
                             {preinput('Title','Title for your place should be short and catchy')}        
                             <input type='text' value={title} onChange={e=> setTitle(e.target.value)} placeholder='title,for example "lonely Place"' />

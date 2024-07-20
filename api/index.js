@@ -139,7 +139,15 @@ app.post('/upload',photosmidleware.array('photos',100),(req,res)=>{
         res.json(files);
 
 })
-  
+app.get('/places/user',(req,res)=>{
+    const {token}=req.cookies;
+    jwt.verify(token,jwtSecret,{},async (err,user)=>{
+        if(err) throw err;
+        const places=await Place.find({owner:user.id})
+        console.log(places)
+        res.json(places)
+    })    
+})
 app.post('/places',(req,res)=>{
     const {title,description,addedPhoto,extraInfo,perks,address,checkIn,checkOut,maxGuests}=req.body;
     console.log(req.body)
