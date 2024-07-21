@@ -17,7 +17,7 @@ function Places() {
 
 
     return (
-        <div>
+        <div>   
             <AcountNav />
             <div className='text-center'>
                 <div className='flex flex-col justify-center items-center w-full'>
@@ -25,7 +25,7 @@ function Places() {
                     {places.length > 0 && places.map(place=>{
                         return (
                             <Link key={place._id} className='flex gap-4 border p-2 rounded-lg mt-2 bg-gray-300 text-left w-2/3' to={"/acounts/places/"+place._id}>
-                                {place.photos.length>0?<img className='w-32 h-32 rounded-xl' src={'http://localhost:4000/uploads/' + place.photos[0]} alt="img" />: <h1>You Currently have no Accomodations</h1> }
+                                {place.photos.length>0?<img className='w-32 h-32 rounded-xl' src={'http://localhost:4000/uploads/' + place.photos[0]} alt="img" />: <div className='w-23 h-32 rounded-xl bg-gray-800'  ></div> }
                                <div>
                                <h1>{place.title}</h1>
                                <p>{place.description}</p>
