@@ -3,9 +3,9 @@ import AcountNav from '../AcountNav'
 
 function Booking() {
   return (
-    <div>
+    <dav>
         <AcountNav  />
-    </div>
+    </dav>
   )
 }
 

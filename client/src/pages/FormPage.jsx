@@ -1,9 +1,9 @@
 import React,{useState} from 'react'
-import { Link, Navigate, useParams } from 'react-router-dom'
+import {  Navigate } from 'react-router-dom'
 import Perks from '../Perks';
 import axios from 'axios';
 import UploadPhoto from '../UploadPhoto';
-import Account from './Account';
+
 import AcountNav from '../AcountNav';
 function FormPage() {
     const [title,setTitle]=useState('');
@@ -32,7 +32,7 @@ function FormPage() {
         return(<Navigate to='/account/places'/>)
     }
     function preinput(header,text){
-        return(
+        return( 
             <>
 
             <h2 className='text-xl mt-4 '>{header}</h2>

@@ -1,8 +1,7 @@
-import React, { useContext, useState } from 'react'
+import  React,{ useContext, useState } from 'react'
 import { UserContext } from '../UserContext'
-import { Link, Navigate, useParams } from 'react-router-dom'
+import {  Navigate, useParams } from 'react-router-dom'
 import axios from 'axios'
-import Places from './Places'
 import AccountNav from '../AcountNav'
 function Account() {
   const [toHome, setToHome] = useState(false)
@@ -11,7 +10,7 @@ function Account() {
   if (subpage === undefined) {
     subpage = 'profile'
   }
-  if (!ready) {
+  if (!ready) { 
     return 'Loading....'
   }
 

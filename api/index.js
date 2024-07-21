@@ -156,7 +156,7 @@ app.post('/places',(req,res)=>{
         if(err) throw err;
         const placeDoc=await Place.create({
             owner:user.id,
-            title,address,addedPhoto,description,perks,extraInfo,checkIn,checkOut,maxGuests
+            title,address,photos:addedPhoto[0],description,perks,extraInfo,checkIn,checkOut,maxGuests
         })  
         res.json(placeDoc)      
     })
