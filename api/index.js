@@ -144,13 +144,13 @@ app.get('/places/user',(req,res)=>{
     jwt.verify(token,jwtSecret,{},async (err,user)=>{
         if(err) throw err;
         const places=await Place.find({owner:user.id})
-        console.log(places)
+        
         res.json(places)
     })    
 })
 app.post('/places',(req,res)=>{
     const {title,description,addedPhoto,extraInfo,perks,address,checkIn,checkOut,maxGuests}=req.body;
-    console.log(req.body)
+    
     const {token}=req.cookies;
     jwt.verify(token,jwtSecret,{},async (err,user)=>{
         if(err) throw err;
@@ -159,6 +159,29 @@ app.post('/places',(req,res)=>{
             title,address,photos:addedPhoto[0],description,perks,extraInfo,checkIn,checkOut,maxGuests
         })  
         res.json(placeDoc)      
+    })
+    
+})
+app.get('/places/:id',(req,res)=>{
+    const {id}=req.params;
+    Place.findById(id).then(data=>{
+        res.json(data)
+    }).catch(err=>{
+        res.status(422).json('cannot find place')
+    })
+})
+app.put("/places/:id",(req,res)=>{
+
+    const {title,description,addedPhoto,extraInfo,perks,address,checkIn,checkOut,maxGuests}=req.body;
+    const {id}=req.params;
+    jwt.verify(req.cookies.token,jwtSecret,{},async (err,user)=>{
+        if(err) throw err;
+        Place.findByIdAndUpdate(id,{owner:user.id,title,description,photos:addedPhoto[0],perks,extraInfo,checkIn,checkOut,maxGuests}).then(data=>{
+            console.log("updated")
+            res.json(data)
+        }).catch(err=>{
+            res.json(err)
+        })
     })
     
 })
