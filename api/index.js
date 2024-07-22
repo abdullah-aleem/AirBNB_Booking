@@ -185,4 +185,16 @@ app.put("/places/:id",(req,res)=>{
     })
     
 })
+app.delete("/places/:id",(req,res)=>{
+    const {id}=req.params;
+    jwt.verify(req.cookies.token,jwtSecret,{},async (err,user)=>{
+        if(err) throw err;
+        Place.findByIdAndDelete(id).then(data=>{
+            console.log("deleted")
+            res.json(data)
+        }).catch(err=>{
+            res.json(err)
+        })
+    })
+})
 app.listen(4000);    
