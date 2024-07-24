@@ -156,7 +156,7 @@ app.post('/places',(req,res)=>{
         if(err) throw err;
         const placeDoc=await Place.create({
             owner:user.id,
-            title,address,photos:addedPhoto[0],description,perks,extraInfo,checkIn,checkOut,maxGuests
+            title,address,photos:addedPhoto,description,perks,extraInfo,checkIn,checkOut,maxGuests
         })  
         res.json(placeDoc)      
     })
@@ -176,7 +176,8 @@ app.put("/places/:id",(req,res)=>{
     const {id}=req.params;
     jwt.verify(req.cookies.token,jwtSecret,{},async (err,user)=>{
         if(err) throw err;
-        Place.findByIdAndUpdate(id,{owner:user.id,title,description,photos:addedPhoto[0],perks,extraInfo,checkIn,checkOut,maxGuests}).then(data=>{
+        
+        Place.findByIdAndUpdate(id,{owner:user.id,title,description,photos:addedPhoto,perks,extraInfo,checkIn,checkOut,maxGuests}).then(data=>{
             console.log("updated")
             res.json(data)
         }).catch(err=>{

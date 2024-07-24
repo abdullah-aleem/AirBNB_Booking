@@ -50,7 +50,7 @@ function Places() {
                                 >
                                     {place.photos.length > 0 ? (
                                         <img
-                                            className='w-32 h-32 rounded-xl'
+                                            className='w-32 h-32 rounded-xl object-cover'
                                             src={'http://localhost:4000/uploads/' + place.photos[0]}
                                             alt="img"
                                         />
